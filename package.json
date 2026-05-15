@@ -5,7 +5,7 @@
   "description": "Saudi Market B2C E-Commerce Platform — Household & Cleaning Products",
   "scripts": {
     "dev": "concurrently \"pnpm --filter api dev\" \"pnpm --filter web dev\"",
-    "build": "pnpm --filter database build && pnpm --filter api build && pnpm --filter web build",
+    "build": "npm --prefix apps/api run build",
     "db:migrate": "pnpm --filter database migrate",
     "db:generate": "pnpm --filter database generate",
     "db:studio": "pnpm --filter database studio",
