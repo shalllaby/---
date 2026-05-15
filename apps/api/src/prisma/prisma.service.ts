@@ -1,5 +1,5 @@
 import { Injectable, OnModuleInit, OnModuleDestroy } from '@nestjs/common';
-import { PrismaClient } from 'database';
+import { PrismaClient } from '@prisma/client';
 
 /**
  * PrismaService — singleton PrismaClient for the NestJS app.
