@@ -5,7 +5,7 @@ import { PrismaService } from '../prisma/prisma.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { ProductsQueryDto } from './dto/products-query.dto';
-import { Prisma, OrderStatus, ShippingType, PaymentMethod } from 'database';
+import { Prisma, OrderStatus, ShippingType, PaymentMethod } from '@prisma/client';
 
 @Injectable()
 export class ProductsService {

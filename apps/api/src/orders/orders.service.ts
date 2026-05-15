@@ -4,7 +4,7 @@ import {
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderStatusDto } from './dto/update-order-status.dto';
-import { Prisma, OrderStatus, PaymentMethod, ShippingType } from 'database';
+import { Prisma, OrderStatus, PaymentMethod, ShippingType } from '@prisma/client';
 import { ReferralService } from '../referral/referral.service';
 import { AddressesService } from '../addresses/addresses.service';
 

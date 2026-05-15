@@ -8,7 +8,7 @@ import { UpdateOrderStatusDto } from './dto/update-order-status.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { Roles } from '../auth/decorators/roles.decorator';
-import { OrderStatus } from 'database';
+import { OrderStatus } from '@prisma/client';
 
 @ApiTags('Orders')
 @Controller('orders')

@@ -4,8 +4,8 @@ import {
 import { PrismaService } from '../prisma/prisma.service';
 import { CreatePackageDto } from './dto/create-package.dto';
 import { UpdatePackageDto } from './dto/update-package.dto';
-import { PackageType, PackageStatus, PaymentMethod, OrderStatus } from 'database';
-import { Prisma } from 'database';
+import { PackageType, PackageStatus, PaymentMethod, OrderStatus } from '@prisma/client';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class PackagesService {
