@@ -3,7 +3,7 @@ import {
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
-import { PaymentMethod, ShippingType } from 'database';
+import { PaymentMethod, ShippingType } from '@prisma/client';
 
 class OrderItemInputDto {
     @IsUUID()

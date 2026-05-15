@@ -1,6 +1,6 @@
 import { IsEnum, IsOptional, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
-import { OrderStatus, ShippingType } from 'database';
+import { OrderStatus, ShippingType } from '@prisma/client';
 
 export class UpdateOrderStatusDto {
     @ApiProperty({ enum: OrderStatus })

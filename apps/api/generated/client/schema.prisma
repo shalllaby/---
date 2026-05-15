@@ -1,0 +1,492 @@
+// =============================================================
+// Prisma Schema — أنهار الديرة (Anhar Al-Deera)
+// Kuwait Market B2C E-Commerce Platform
+// PostgreSQL | Prisma ORM
+// Updated: 2026-02
+// =============================================================
+
+generator client {
+  provider      = "prisma-client-js"
+  output        = "../generated/client"
+  binaryTargets = ["native", "windows", "debian-openssl-3.0.x", "linux-musl-openssl-3.0.x"]
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+// ─────────────────────────────────────────────
+// ENUMS
+// ─────────────────────────────────────────────
+
+enum UserRole {
+  ADMIN
+  CUSTOMER
+}
+
+enum ReferralStatus {
+  PENDING
+  CONFIRMED
+}
+
+enum OrderStatus {
+  PENDING // بانتظار الدفع
+  PAID // تم الدفع
+  PROCESSING // قيد المعالجة
+  SHIPPED // تم الشحن
+  DELIVERED // تم التسليم
+  CANCELED // ملغي
+  REFUNDED // مسترجع
+}
+
+/// Kuwait payment methods
+enum PaymentMethod {
+  KNET // الكي نت — الوسيلة الرئيسية في الكويت
+  PAY_DEEMA // Deema BNPL
+  APPLE_PAY // Apple Pay
+  VISA_MASTERCARD // بطاقة ائتمانية
+  CASH_ON_DELIVERY // الدفع عند الاستلام
+}
+
+/// Kuwait shipping / delivery types
+enum ShippingType {
+  STANDARD // توصيل عادي (1-2 يوم)
+  SAME_DAY // توصيل في نفس اليوم
+  INSTANT // توصيل فوري (خلال ساعات)
+  SELF_PICKUP // استلام من المستودع
+}
+
+/// The six Kuwait governorates
+enum KuwaitGovernorate {
+  ASIMAH // العاصمة
+  HAWALLI // حولي
+  FARWANIYA // الفروانية
+  JAHRA // الجهراء
+  MUBARAK_AL_KABEER // مبارك الكبير
+  AHMADI // الأحمدي
+}
+
+/// Package types / أنواع الباقات الشهرية
+enum PackageType {
+  HOME // باقة للمنزل
+  WORK // باقة للعمل
+  CUSTOM // باقة مخصصة
+}
+
+/// Package lifecycle status / حالة الباقة الشهرية
+enum PackageStatus {
+  ACTIVE // نشط
+  PAUSED // موقوف مؤقتاً
+}
+
+// ─────────────────────────────────────────────
+// USER
+// ─────────────────────────────────────────────
+
+model User {
+  id           String   @id @default(uuid())
+  name         String
+  email        String   @unique
+  passwordHash String   @map("password_hash")
+  phone        String?
+  role         UserRole @default(CUSTOMER)
+  isActive     Boolean  @default(true) @map("is_active")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  orders    Order[]
+  addresses Address[]
+  packages  Package[]
+  coupons   Coupon[]
+  reviews   Review[]
+
+  luckyWheelSpins LuckyWheelSpin[]
+
+  // Referral — identity fields
+  referralCode         String? @unique @map("referral_code")
+  referralLink         String? @map("referral_link")
+  referredBy           String? @map("referred_by") // referrer User.id (denorm)
+  referralCount        Int     @default(0) @map("referral_count") // kept for compat
+  referralDiscountCode String? @map("referral_discount_code")
+  referralDiscountUsed Boolean @default(false) @map("referral_discount_used")
+
+  // Referral — new production flags
+  discountEligible Boolean @default(false) @map("discount_eligible")
+  discountUsed     Boolean @default(false) @map("discount_used")
+
+  // Referral — relations to Referral table
+  referralsMade    Referral[] @relation("ReferralsMade")
+  referralReceived Referral?  @relation("ReferralReceived")
+
+  @@index([email])
+  @@map("users")
+}
+
+// ─────────────────────────────────────────────
+// ADDRESS — Kuwait governorate-based
+// ─────────────────────────────────────────────
+
+model Address {
+  id            String            @id @default(uuid())
+  userId        String?           @map("user_id")
+  fullName      String            @map("full_name")
+  phone         String
+  block         String? // رقم القطعة (Kuwait address format)
+  street        String
+  building      String? // رقم المبنى
+  floor         String? // الطابق
+  apartment     String? // رقم الشقة
+  area          String // المنطقة / الحي
+  governorate   KuwaitGovernorate // المحافظة
+  isDefault     Boolean           @default(false) @map("is_default")
+  deliveryNotes String?           @map("delivery_notes") @db.Text // تعليمات التوصيل
+  createdAt     DateTime          @default(now()) @map("created_at")
+
+  // Relations
+  user   User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  orders Order[]
+
+  @@index([userId])
+  @@map("addresses")
+}
+
+// ─────────────────────────────────────────────
+// CATEGORY (Nested / Self-relational)
+// ─────────────────────────────────────────────
+
+model Category {
+  id        String  @id @default(uuid())
+  nameAr    String  @map("name_ar")
+  nameEn    String  @map("name_en")
+  slug      String  @unique
+  imageUrl  String? @map("image_url")
+  isActive  Boolean @default(true) @map("is_active")
+  sortOrder Int     @default(0) @map("sort_order")
+
+  // Self-relation for sub-categories
+  parentId String?    @map("parent_id")
+  parent   Category?  @relation("SubCategories", fields: [parentId], references: [id])
+  children Category[] @relation("SubCategories")
+
+  // Relations
+  products Product[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@index([slug])
+  @@index([parentId])
+  @@map("categories")
+}
+
+// ─────────────────────────────────────────────
+// TAG — Product labels (many-to-many)
+// ─────────────────────────────────────────────
+
+model Tag {
+  id     String @id @default(uuid())
+  nameAr String @unique @map("name_ar")
+  nameEn String @unique @map("name_en")
+  slug   String @unique
+
+  products ProductTag[]
+
+  @@map("tags")
+}
+
+model ProductTag {
+  productId String @map("product_id")
+  tagId     String @map("tag_id")
+
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  tag     Tag     @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@id([productId, tagId])
+  @@map("product_tags")
+}
+
+// ─────────────────────────────────────────────
+// PRODUCT ATTRIBUTE — flexible key/value pairs
+// e.g., key:"Color" value:"أبيض"
+//       key:"Size"  value:"XL"
+//       key:"Brand" value:"Samsung"
+// ─────────────────────────────────────────────
+
+model ProductAttribute {
+  id        String @id @default(uuid())
+  productId String @map("product_id")
+  key       String // e.g., "Color", "Size", "Brand", "Material"
+  keyAr     String @map("key_ar") // e.g., "اللون", "المقاس", "العلامة"
+  value     String // e.g., "Red", "XL", "Samsung"
+  valueAr   String @map("value_ar") // e.g., "أحمر", "كبير", "سامسونج"
+
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@index([productId])
+  @@map("product_attributes")
+}
+
+// ─────────────────────────────────────────────
+// BRAND — reusable brand entity (Samsung, Nike, etc.)
+// ─────────────────────────────────────────────
+
+model Brand {
+  id      String  @id @default(uuid())
+  nameAr  String  @map("name_ar")
+  nameEn  String  @map("name_en")
+  slug    String  @unique
+  logoUrl String? @map("logo_url")
+
+  products Product[]
+
+  @@index([slug])
+  @@map("brands")
+}
+
+// ─────────────────────────────────────────────
+// PRODUCT
+// ─────────────────────────────────────────────
+
+model Product {
+  id            String   @id @default(uuid())
+  categoryId    String   @map("category_id")
+  brandId       String?  @map("brand_id") // optional — link to Brand
+  nameAr        String   @map("name_ar")
+  nameEn        String   @map("name_en")
+  descriptionAr String?  @map("description_ar") @db.Text
+  descriptionEn String?  @map("description_en") @db.Text
+  sku           String   @unique
+  price         Decimal  @db.Decimal(10, 3) // KWD — 3 decimal places
+  discountPrice Decimal? @map("discount_price") @db.Decimal(10, 3)
+  stockQuantity Int      @default(0) @map("stock_quantity")
+  weightKg      Decimal? @map("weight_kg") @db.Decimal(8, 3)
+  images        String[]
+  isActive      Boolean  @default(true) @map("is_active")
+  isFeatured    Boolean  @default(false) @map("is_featured")
+  viewCount     Int      @default(0) @map("view_count")
+
+  // Relations
+  category     Category           @relation(fields: [categoryId], references: [id])
+  brand        Brand?             @relation(fields: [brandId], references: [id])
+  orderItems   OrderItem[]
+  attributes   ProductAttribute[]
+  tags         ProductTag[]
+  packageItems PackageItem[]
+  reviews      Review[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@index([categoryId])
+  @@index([brandId])
+  @@index([sku])
+  @@index([isActive, isFeatured])
+  @@map("products")
+}
+
+// ─────────────────────────────────────────────
+// ORDER
+// ─────────────────────────────────────────────
+
+model Order {
+  id             String        @id @default(uuid())
+  userId         String        @map("user_id")
+  addressId      String?       @map("address_id")
+  status         OrderStatus   @default(PENDING)
+  paymentMethod  PaymentMethod @map("payment_method")
+  paymentRef     String?       @map("payment_ref")
+  shippingType   ShippingType? @map("shipping_type")
+  trackingNumber String?       @map("tracking_number")
+  shippingFee    Decimal       @default(0) @map("shipping_fee") @db.Decimal(10, 3)
+  codFee         Decimal       @default(0) @map("cod_fee") @db.Decimal(10, 3)
+  subtotal       Decimal       @db.Decimal(10, 3) // KWD
+  couponCode     String?       @map("coupon_code")
+  discountAmount Decimal       @default(0) @map("discount_amount") @db.Decimal(10, 3)
+  totalAmount    Decimal       @map("total_amount") @db.Decimal(10, 3)
+  notes          String?       @db.Text
+
+  // Relations
+  user    User        @relation(fields: [userId], references: [id])
+  address Address?    @relation(fields: [addressId], references: [id])
+  items   OrderItem[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@index([userId])
+  @@index([status])
+  @@index([createdAt])
+  @@map("orders")
+}
+
+// ─────────────────────────────────────────────
+// ORDER ITEM (immutable snapshot)
+// ─────────────────────────────────────────────
+
+model OrderItem {
+  id              String  @id @default(uuid())
+  orderId         String  @map("order_id")
+  productId       String? @map("product_id")
+  quantity        Int
+  priceAtPurchase Decimal @map("price_at_purchase") @db.Decimal(10, 3) // KWD snapshot
+  productNameAr   String  @map("product_name_ar")
+  productNameEn   String  @map("product_name_en")
+  productSku      String  @map("product_sku")
+
+  // Relations
+  order   Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product Product? @relation(fields: [productId], references: [id], onDelete: SetNull)
+
+  @@index([orderId])
+  @@index([productId])
+  @@map("order_items")
+}
+
+// ─────────────────────────────────────────────
+// PACKAGE — باقة منتجات شهرية
+// ─────────────────────────────────────────────
+
+model Package {
+  id        String        @id @default(uuid())
+  userId    String        @map("user_id")
+  type      PackageType
+  nameAr    String        @map("name_ar")
+  status    PackageStatus @default(ACTIVE)
+  createdAt DateTime      @default(now()) @map("created_at")
+  updatedAt DateTime      @updatedAt @map("updated_at")
+
+  // Relations
+  user  User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  items PackageItem[]
+
+  @@index([userId])
+  @@index([status])
+  @@map("packages")
+}
+
+// ─────────────────────────────────────────────
+// PACKAGE ITEM — منتجات ضمن الباقة
+// ─────────────────────────────────────────────
+
+model PackageItem {
+  id        String  @id @default(uuid())
+  packageId String  @map("package_id")
+  productId String? @map("product_id")
+  quantity  Int     @default(1)
+
+  // Snapshot fields — freeze product data at the time of saving the box
+  priceAtTime         Decimal @map("price_at_time") @db.Decimal(10, 3)
+  productNameArAtTime String  @map("product_name_ar_at_time")
+  productNameEnAtTime String  @map("product_name_en_at_time")
+
+  // Relations
+  package Package  @relation(fields: [packageId], references: [id], onDelete: Cascade)
+  product Product? @relation(fields: [productId], references: [id], onDelete: SetNull)
+
+  @@index([packageId])
+  @@index([productId])
+  @@map("package_items")
+}
+
+// ─────────────────────────────────────────────
+// REFERRAL — سجل الإحالات
+// ─────────────────────────────────────────────
+
+model Referral {
+  id          String         @id @default(uuid())
+  referrerId  String         @map("referrer_id")
+  referredId  String         @unique @map("referred_id") // one referral per referred user
+  status      ReferralStatus @default(PENDING)
+  confirmedAt DateTime?      @map("confirmed_at")
+  createdAt   DateTime       @default(now()) @map("created_at")
+
+  referrer User @relation("ReferralsMade", fields: [referrerId], references: [id], onDelete: Cascade)
+  referred User @relation("ReferralReceived", fields: [referredId], references: [id], onDelete: Cascade)
+
+  @@index([referrerId])
+  @@index([status])
+  @@map("referrals")
+}
+
+// ─────────────────────────────────────────────
+// REVIEW — تقييم منتج (مشترٍ موثّق فقط)
+// ─────────────────────────────────────────────
+
+model Review {
+  id         String  @id @default(uuid())
+  productId  String  @map("product_id")
+  userId     String  @map("user_id")
+  rating     Int // 1–5
+  body       String? @db.Text
+  isVerified Boolean @default(false) @map("is_verified") // true = confirmed purchaser
+
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // One review per user per product
+  @@unique([productId, userId])
+  @@index([productId])
+  @@index([userId])
+  @@map("reviews")
+}
+
+// ─────────────────────────────────────────────
+// COUPON — كوبون خصم (من الإحالة)
+// ─────────────────────────────────────────────
+
+model Coupon {
+  id          String   @id @default(uuid())
+  userId      String?  @map("user_id") // Made optional for generic coupons
+  code        String   @unique
+  discountPct Int      @map("discount_pct") // e.g. 5 for 5%
+  isUsed      Boolean  @default(false) @map("is_used")
+  usageLimit  Int      @default(1) @map("usage_limit")
+  usedCount   Int      @default(0) @map("used_count")
+  expiresAt   DateTime @map("expires_at")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  // Relations
+  user User? @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([code])
+  @@map("coupons")
+}
+
+// ─────────────────────────────────────────────
+// LUCKY WHEEL
+// ─────────────────────────────────────────────
+
+model LuckyWheelReward {
+  id          String  @id @default(uuid())
+  type        String // e.g. "DISCOUNT", "NO_WIN", "MYSTERY"
+  value       String // e.g. "5", "Better luck next time"
+  probability Float // e.g. 0.05 for 5%
+  isActive    Boolean @default(true) @map("is_active")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("lucky_wheel_rewards")
+}
+
+model LuckyWheelSpin {
+  id          String  @id @default(uuid())
+  userId      String  @map("user_id")
+  rewardId    String? @map("reward_id")
+  rewardType  String  @map("reward_type") // denormalized for ease
+  rewardValue String  @map("reward_value")
+  couponCode  String? @map("coupon_code")
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@index([userId])
+  @@map("lucky_wheel_spins")
+}
