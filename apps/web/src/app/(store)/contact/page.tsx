@@ -1,6 +1,6 @@
 import { Metadata } from 'next';
-import { Phone, Mail, MapPin, MessageCircle, Clock, Send } from 'lucide-react';
-import { STORE_PHONE, STORE_EMAIL, STORE_WHATSAPP } from '@/lib/constants';
+import { Phone, Mail, MapPin, MessageCircle, Clock, Send, Linkedin, Facebook, Music2, Instagram } from 'lucide-react';
+import { STORE_PHONE, STORE_EMAIL, STORE_WHATSAPP_SUPPORT, STORE_LINKEDIN, STORE_FACEBOOK, STORE_TIKTOK, STORE_INSTAGRAM } from '@/lib/constants';
 
 export const metadata: Metadata = {
     title: 'تواصل معنا — الديرة باك',
@@ -32,7 +32,7 @@ export default function ContactPage() {
                             <div className="space-y-6">
                                 {/* WhatsApp Card - Most Important in KW */}
                                 <a
-                                    href={STORE_WHATSAPP}
+                                    href={STORE_WHATSAPP_SUPPORT}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="flex items-center gap-6 p-8 bg-green-50 rounded-[2.5rem] border border-green-100 hover:shadow-xl hover:shadow-green-100/50 transition-all group"
@@ -42,8 +42,8 @@ export default function ContactPage() {
                                     </div>
                                     <div>
                                         <p className="text-xs font-bold text-green-600 uppercase tracking-widest mb-1">الأسرع دائماً</p>
-                                        <h3 className="text-xl font-black text-gray-900">واتساب مباشر</h3>
-                                        <p className="text-sm text-gray-500 font-bold mt-1">نرد عليك خلال دقائق معدودة</p>
+                                        <h3 className="text-xl font-black text-gray-900">واتساب — شكاوى واقتراحات</h3>
+                                        <p className="text-sm text-gray-500 font-bold mt-1" dir="ltr">+965 65668003</p>
                                     </div>
                                 </a>
 
@@ -128,6 +128,85 @@ export default function ContactPage() {
                                 </form>
                             </div>
                         </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* ── SOCIAL MEDIA SECTION ── */}
+            <section className="bg-white py-20 border-t border-gray-100">
+                <div className="max-w-7xl mx-auto px-4">
+                    <div className="text-center mb-12">
+                        <span className="inline-block bg-brand-50 text-brand-600 text-xs font-black px-4 py-2 rounded-full mb-4 uppercase tracking-widest">ابقَ على تواصل</span>
+                        <h2 className="text-3xl font-black text-gray-900">تابعنا على <span className="text-brand-600">السوشيال ميديا</span></h2>
+                        <p className="text-gray-500 font-bold mt-3">آخر العروض والمنتجات الجديدة — لا تفوّتها</p>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-4xl mx-auto">
+
+                        {/* LinkedIn */}
+                        <a
+                            href={STORE_LINKEDIN}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex flex-col items-center gap-4 p-8 bg-[#EBF3FB] rounded-[2.5rem] border border-[#cce0f5] hover:shadow-xl hover:shadow-blue-100/60 transition-all group"
+                        >
+                            <div className="w-16 h-16 bg-[#0A66C2] text-white rounded-2xl flex items-center justify-center shadow-md group-hover:scale-110 transition-transform">
+                                <Linkedin className="w-8 h-8" />
+                            </div>
+                            <div className="text-center">
+                                <h3 className="text-lg font-black text-gray-900">LinkedIn</h3>
+                                <p className="text-xs font-bold text-[#0A66C2] mt-1">تابع صفحتنا المهنية</p>
+                            </div>
+                        </a>
+
+                        {/* Facebook */}
+                        <a
+                            href={STORE_FACEBOOK}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex flex-col items-center gap-4 p-8 bg-[#EBF0FA] rounded-[2.5rem] border border-[#c8d8f8] hover:shadow-xl hover:shadow-blue-100/60 transition-all group"
+                        >
+                            <div className="w-16 h-16 bg-[#1877F2] text-white rounded-2xl flex items-center justify-center shadow-md group-hover:scale-110 transition-transform">
+                                <Facebook className="w-8 h-8" />
+                            </div>
+                            <div className="text-center">
+                                <h3 className="text-lg font-black text-gray-900">Facebook</h3>
+                                <p className="text-xs font-bold text-[#1877F2] mt-1">أعجبك صفحتنا على فيسبوك</p>
+                            </div>
+                        </a>
+
+                        {/* TikTok */}
+                        <a
+                            href={STORE_TIKTOK}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex flex-col items-center gap-4 p-8 bg-gray-50 rounded-[2.5rem] border border-gray-200 hover:shadow-xl hover:shadow-gray-200/60 transition-all group"
+                        >
+                            <div className="w-16 h-16 bg-gray-900 text-white rounded-2xl flex items-center justify-center shadow-md group-hover:scale-110 transition-transform">
+                                <Music2 className="w-8 h-8" />
+                            </div>
+                            <div className="text-center">
+                                <h3 className="text-lg font-black text-gray-900">TikTok</h3>
+                                <p className="text-xs font-bold text-gray-600 mt-1">شاهد مقاطعنا على تيك توك</p>
+                            </div>
+                        </a>
+
+                        {/* Instagram */}
+                        <a
+                            href={STORE_INSTAGRAM}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex flex-col items-center gap-4 p-8 bg-[#FDF0F7] rounded-[2.5rem] border border-[#f5c6e8] hover:shadow-xl hover:shadow-pink-100/60 transition-all group"
+                        >
+                            <div className="w-16 h-16 bg-gradient-to-br from-[#f09433] via-[#e6683c] via-[#dc2743] via-[#cc2366] to-[#bc1888] text-white rounded-2xl flex items-center justify-center shadow-md group-hover:scale-110 transition-transform">
+                                <Instagram className="w-8 h-8" />
+                            </div>
+                            <div className="text-center">
+                                <h3 className="text-lg font-black text-gray-900">Instagram</h3>
+                                <p className="text-xs font-bold text-[#e1306c] mt-1">تابعنا على إنستغرام</p>
+                            </div>
+                        </a>
+
                     </div>
                 </div>
             </section>

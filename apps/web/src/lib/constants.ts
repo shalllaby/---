@@ -8,10 +8,14 @@
 export const STORE_NAME = 'انهار الديرة';
 export const STORE_NAME_EN = 'Anhar AL-Deera';
 export const STORE_TAGLINE = 'تحت سقف الديرة — كل ما تحتاج';
-export const STORE_EMAIL = 'support@anharaldeerak.kw';
+export const STORE_EMAIL = 'bakaldayruh@gmail.com';
 export const STORE_PHONE = '+965 51625057';
 export const STORE_WHATSAPP = 'https://wa.me/96551625057';
-export const STORE_INSTAGRAM = 'https://instagram.com/anharaldeerak';
+export const STORE_WHATSAPP_SUPPORT = 'https://wa.me/96565668003'; // شكاوى واقتراحات
+export const STORE_INSTAGRAM = 'https://www.instagram.com/dert.na2026';
+export const STORE_LINKEDIN = 'https://www.linkedin.com/in/aldayruh-bak-8a38ab3b0?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app';
+export const STORE_FACEBOOK = 'https://www.facebook.com/share/1arCVHQanf/?mibextid=wwXIfr';
+export const STORE_TIKTOK = 'https://www.tiktok.com/@ysyl6144d8b?_r=1&_t=ZS-96DTBgFgtIy';
 
 // ── Currency ──────────────────────────────────────────────────────────────
 export const CURRENCY = 'KWD';

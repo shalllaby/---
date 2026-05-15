@@ -51,7 +51,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                             <Store size={22} />
                         </div>
                         <div>
-                            <h1 className="text-lg font-bold text-slate-900 leading-tight">الديرة باك</h1>
+                            <h1 className="text-lg font-bold text-slate-900 leading-tight">أنهار الديرة</h1>
                             <p className="text-[10px] text-slate-400 uppercase tracking-wider font-semibold">Admin Panel</p>
                         </div>
                     </Link>

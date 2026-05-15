@@ -1,24 +1,8 @@
 import type { Metadata, Viewport } from 'next';
-import { IBM_Plex_Sans_Arabic, Cairo } from 'next/font/google';
 import { Toaster } from 'react-hot-toast';
 import './globals.css';
 import { STORE_NAME } from '@/lib/constants';
 import ThemeProvider from '@/components/ui/ThemeProvider';
-
-const arabicFont = IBM_Plex_Sans_Arabic({
-    subsets: ['arabic', 'latin'],
-    weight: ['300', '400', '500', '600', '700'],
-    variable: '--font-arabic',
-    display: 'swap',
-    fallback: ['system-ui', 'Tajawal', 'sans-serif'],
-});
-
-const cairoFont = Cairo({
-    subsets: ['arabic', 'latin'],
-    weight: ['400', '500', '600', '700', '800', '900'],
-    variable: '--font-cairo',
-    display: 'swap',
-});
 
 export const metadata: Metadata = {
     title: {
@@ -51,7 +35,12 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
     return (
-        <html lang="ar" dir="rtl" className={`${arabicFont.variable} ${cairoFont.variable}`}>
+        <html lang="ar" dir="rtl">
+            <head>
+                <link rel="preconnect" href="https://fonts.googleapis.com" />
+                <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+                <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400..900&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+            </head>
             <body className="font-sans antialiased bg-zinc-50 text-zinc-900 dark:bg-zinc-950 dark:text-zinc-50 transition-colors duration-200">
                 <ThemeProvider>
                     {children}
@@ -59,7 +48,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                         position="top-left"
                         toastOptions={{
                             style: {
-                                fontFamily: 'var(--font-arabic)',
+                                fontFamily: '"IBM Plex Sans Arabic", sans-serif',
                                 direction: 'rtl',
                                 borderRadius: '14px',
                                 background: 'var(--surface-0)',

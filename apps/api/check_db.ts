@@ -1,4 +1,4 @@
-import { PrismaClient } from '../packages/database/generated/client';
+import { PrismaClient } from '../../packages/database/generated/client';
 const prisma = new PrismaClient();
 async function main() {
     const cats = await prisma.category.findMany();

@@ -11,7 +11,11 @@ async function bootstrap() {
 
     // ── CORS (allow Next.js frontend) ────────────────
     app.enableCors({
-        origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+        origin: [
+            'https://deira.store',
+            'https://www.deira.store',
+            'http://localhost:3000'
+        ],
         credentials: true,
     });
 

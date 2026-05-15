@@ -27,11 +27,11 @@ const FOOTER_LINKS = {
 };
 
 const COMPANIES = [
-    { name: 'انهار الديرة', sub: 'الشركة الأم', phone: '+965 51625057', emoji: '⭐' },
-    { name: 'البراق باك', sub: 'شركة شقيقة', phone: '+965 55107779', emoji: '🔷' },
-    { name: 'شموخ الديرة', sub: 'شركة شقيقة', phone: '+965 55609091', emoji: '🔷' },
-    { name: 'خير الديرة', sub: 'شركة شقيقة', phone: '+965 65668003', emoji: '🔷' },
-    { name: 'الديرة باك', sub: 'شركة شقيقة', phone: '+965 67047033', emoji: '🔷' },
+    { name: 'انهار الديرة', emoji: '⭐' },
+    { name: 'البراق باك', emoji: '🔷' },
+    { name: 'شموخ الديرة', emoji: '🔷' },
+    { name: 'خير الديرة', emoji: '🔷' },
+    { name: 'الديرة باك', emoji: '🔷' },
 ];
 
 export default function Footer() {
@@ -134,8 +134,8 @@ export default function Footer() {
                     margin: 0 auto;
                     padding: 56px 24px 40px;
                     display: grid;
-                    grid-template-columns: 1.6fr 1fr 1fr 1.4fr;
-                    gap: 48px;
+                    grid-template-columns: 1.5fr 0.8fr 0.8fr 1fr 1.3fr;
+                    gap: 32px;
                     position: relative;
                     z-index: 2;
                 }
@@ -472,17 +472,25 @@ export default function Footer() {
                         {/* Companies */}
                         <div className="companies-label">مجموعة شركاتنا</div>
                         {COMPANIES.map((c) => (
-                            <a key={c.name} href={`tel:${c.phone.replace(/\s/g, '')}`} className="company-row">
+                            <div key={c.name} className="company-row" style={{ cursor: 'default' }}>
                                 <div className="company-row-left">
                                     <div className={`company-dot ${c.name === 'انهار الديرة' ? 'main' : ''}`} />
                                     <div>
                                         <div className={`company-name ${c.name === 'انهار الديرة' ? 'main' : ''}`}>{c.name}</div>
-                                        <div style={{ fontSize: '0.68rem', color: '#475569' }}>{c.sub}</div>
                                     </div>
                                 </div>
-                                <div className="company-phone">{c.phone}</div>
-                            </a>
+                            </div>
                         ))}
+
+                        {/* General Contact */}
+                        <div className="companies-label" style={{ marginTop: 20 }}>للتواصل مع مسؤولي المجموعة</div>
+                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                            <a href="tel:60008807" style={{ fontSize: '0.8rem', color: '#A78BFA', textDecoration: 'none', direction: 'ltr' }}>60008807</a>
+                            <span style={{ color: '#475569' }}>|</span>
+                            <a href="tel:60048631" style={{ fontSize: '0.8rem', color: '#A78BFA', textDecoration: 'none', direction: 'ltr' }}>60048631</a>
+                            <span style={{ color: '#475569' }}>|</span>
+                            <a href="tel:65668003" style={{ fontSize: '0.8rem', color: '#A78BFA', textDecoration: 'none', direction: 'ltr' }}>65668003</a>
+                        </div>
                     </div>
 
                     {/* ② Shop Links */}
@@ -505,7 +513,29 @@ export default function Footer() {
                         ))}
                     </div>
 
-                    {/* ④ Coverage + Payment */}
+                    {/* ④ Management */}
+                    <div>
+                        <div className="footer-col-title">الإدارة</div>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                            <div>
+                                <div style={{ fontSize: '0.82rem', fontWeight: 700, color: '#CBD5E1' }}>أ. أحمد توفيق</div>
+                                <div style={{ fontSize: '0.68rem', color: '#94A3B8', marginBottom: '2px' }}>رئيس مجلس الإدارة</div>
+                                <a href="tel:60008807" style={{ fontSize: '0.78rem', color: '#A78BFA', textDecoration: 'none', direction: 'ltr', display: 'inline-block', transition: 'color 0.2s' }} onMouseOver={(e) => e.currentTarget.style.color = '#fff'} onMouseOut={(e) => e.currentTarget.style.color = '#A78BFA'}>60008807</a>
+                            </div>
+                            <div>
+                                <div style={{ fontSize: '0.82rem', fontWeight: 700, color: '#CBD5E1' }}>م/ وليد عيسى</div>
+                                <div style={{ fontSize: '0.68rem', color: '#94A3B8', marginBottom: '2px' }}>المدير التنفيذي للتصميم</div>
+                                <a href="tel:60048631" style={{ fontSize: '0.78rem', color: '#A78BFA', textDecoration: 'none', direction: 'ltr', display: 'inline-block', transition: 'color 0.2s' }} onMouseOver={(e) => e.currentTarget.style.color = '#fff'} onMouseOut={(e) => e.currentTarget.style.color = '#A78BFA'}>60048631</a>
+                            </div>
+                            <div>
+                                <div style={{ fontSize: '0.82rem', fontWeight: 700, color: '#CBD5E1' }}>م/ محمد شلبي</div>
+                                <div style={{ fontSize: '0.68rem', color: '#94A3B8', marginBottom: '2px' }}>الدعم الفني والصيانة</div>
+                                <a href="tel:+201094775924" style={{ fontSize: '0.78rem', color: '#A78BFA', textDecoration: 'none', direction: 'ltr', display: 'inline-block', transition: 'color 0.2s' }} onMouseOver={(e) => e.currentTarget.style.color = '#fff'} onMouseOut={(e) => e.currentTarget.style.color = '#A78BFA'}>+201094775924</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* ⑤ Coverage + Payment */}
                     <div>
                         <div className="footer-col-title">التغطية</div>
                         <div className="gov-grid">

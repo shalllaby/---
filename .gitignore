@@ -7,3 +7,9 @@ dist/
 *.log
 .DS_Store
 uploads/
+*.zip
+*.tmp*
+lt_out.txt
+lt_url.txt
+project_files.txt
+report.txt

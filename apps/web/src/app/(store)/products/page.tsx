@@ -127,7 +127,7 @@ export default async function ProductsPage({ searchParams }: { searchParams: any
             {/* ── SEO CONTENT SECTION ─────────────────────────────────── */}
             <section className="bg-slate-50 py-20 border-t border-gray-100">
                 <div className="max-w-4xl mx-auto px-4 text-center">
-                    <h2 className="text-3xl font-black text-gray-900 mb-6">تسوق من الديرة باك في الكويت</h2>
+                    <h2 className="text-3xl font-black text-gray-900 mb-6">تسوق من انهار الديرة في الكويت</h2>
                     <p className="text-gray-600 leading-relaxed font-medium">
                         نحن فخورون بكوننا الوجهة الأولى لمنتجات النظافة والمنزل في الكويت. نوفر لكم تشكيلة واسعة من العلامات التجارية العالمية بأسعار تنافسية. استمتع بتجربة تسوق آمنة مع خيارات دفع متعددة تشمل كي نت، Apple Pay، والدفع عند الاستلام، مع أسرع خدمة توصيل تغطي جميع محافظات الكويت الست.
                     </p>

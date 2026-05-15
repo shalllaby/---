@@ -106,7 +106,7 @@ export default function AdminDashboardPage() {
             {/* Header */}
             <div>
                 <h1 className="text-2xl font-bold text-slate-900">نظرة عامة على المتجر</h1>
-                <p className="text-slate-500 mt-1">مرحباً بك مجدداً، إليك ما يحدث في متجر الديرة باك اليوم.</p>
+                <p className="text-slate-500 mt-1">مرحباً بك مجدداً، إليك ما يحدث في متجر أنهار الديرة اليوم.</p>
             </div>
 
             {/* Stats Grid */}

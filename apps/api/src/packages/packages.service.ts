@@ -177,6 +177,9 @@ export class PackagesService {
             }[] = [];
 
             for (const pi of pkg.items) {
+                if (!pi.productId) {
+                    throw new BadRequestException(`منتج "${pi.productNameArAtTime}" غير متاح حالياً`);
+                }
                 const product = await tx.product.findUnique({ where: { id: pi.productId } });
                 if (!product || !product.isActive) {
                     throw new BadRequestException(`منتج "${pi.productNameArAtTime}" غير متاح حالياً`);

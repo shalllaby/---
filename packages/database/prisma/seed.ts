@@ -66,10 +66,10 @@ async function main() {
         update: { imageUrl: 'https://i.ibb.co/tTXMsyr7/image.png' },
         create: { nameAr: 'العناية بالبشرة', nameEn: 'Skin Care', slug: 'skin-care', sortOrder: 4, imageUrl: 'https://i.ibb.co/tTXMsyr7/image.png' },
     });
-    const plasticUtensils = await prisma.category.upsert({
-        where: { slug: 'plastic-utensils' },
-        update: { imageUrl: 'https://i.ibb.co/Xx3fcQ2m/image.png' },
-        create: { nameAr: 'الأواني البلاستيكية', nameEn: 'Plastic Utensils', slug: 'plastic-utensils', sortOrder: 5, imageUrl: 'https://i.ibb.co/Xx3fcQ2m/image.png' },
+    const deeraClutter = await prisma.category.upsert({
+        where: { slug: 'deera-clutter' },
+        update: { imageUrl: '/clutter.png' },
+        create: { nameAr: 'كراكيب الديره', nameEn: 'Deera Clutter', slug: 'deera-clutter', sortOrder: 5, imageUrl: '/clutter.png' },
     });
     const discounts = await prisma.category.upsert({
         where: { slug: 'discounts' },
