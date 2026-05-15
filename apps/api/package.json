@@ -3,7 +3,7 @@
     "version": "1.0.0",
     "description": "Kuwait Store — NestJS REST API Backend",
     "scripts": {
-        "build": "prisma generate && npx tsc -p tsconfig.json || true",
+        "build": "npx prisma generate --schema=prisma/schema.prisma && npx tsc -p tsconfig.json || true",
         "start": "node dist/main",
         "dev": "nest start --watch",
         "test": "jest",
