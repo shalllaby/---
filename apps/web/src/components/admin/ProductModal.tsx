@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { X, Upload, Loader2, Package, Save } from 'lucide-react';
+import { X, Upload, Loader2, Package, Save, Image as ImageIcon } from 'lucide-react';
 import apiClient from '@/lib/api-client';
 import toast from 'react-hot-toast';
 import { clsx } from 'clsx';
@@ -49,6 +49,8 @@ export default function ProductModal({ isOpen, onClose, onSuccess, product }: Pr
         categoryId: '',
         images: [''],
     });
+    const [imageFile, setImageFile] = useState<File | null>(null);
+    const [imagePreview, setImagePreview] = useState<string | null>(null);
 
     const isEdit = !!product;
 
@@ -66,8 +68,9 @@ export default function ProductModal({ isOpen, onClose, onSuccess, product }: Pr
                     discountPrice: product.discountPrice?.toString() || '',
                     stockQuantity: product.stockQuantity?.toString() || '0',
                     categoryId: product.categoryId || '',
-                    images: product.images?.length > 0 ? product.images : [''],
                 });
+                setImagePreview(product.images?.[0] || null);
+                setImageFile(null);
             } else {
                 // Reset form for fresh add
                 setFormData({
@@ -82,6 +85,8 @@ export default function ProductModal({ isOpen, onClose, onSuccess, product }: Pr
                     categoryId: '',
                     images: [''],
                 });
+                setImagePreview(null);
+                setImageFile(null);
             }
         }
     }, [isOpen, product]);
@@ -103,19 +108,30 @@ export default function ProductModal({ isOpen, onClose, onSuccess, product }: Pr
         setLoading(true);
 
         try {
-            const payload = {
-                ...formData,
-                price: parseFloat(formData.price),
-                discountPrice: formData.discountPrice ? parseFloat(formData.discountPrice) : null,
-                stockQuantity: parseInt(formData.stockQuantity),
-                images: formData.images.filter(img => img.trim() !== ''),
-            };
+            const formDataToSend = new FormData();
+            formDataToSend.append('nameAr', formData.nameAr);
+            formDataToSend.append('nameEn', formData.nameEn);
+            formDataToSend.append('sku', formData.sku);
+            formDataToSend.append('categoryId', formData.categoryId);
+            formDataToSend.append('price', formData.price.toString());
+            if (formData.discountPrice) formDataToSend.append('discountPrice', formData.discountPrice.toString());
+            formDataToSend.append('stockQuantity', formData.stockQuantity.toString());
+            if (formData.descriptionAr) formDataToSend.append('descriptionAr', formData.descriptionAr);
+            if (formData.descriptionEn) formDataToSend.append('descriptionEn', formData.descriptionEn);
+
+            if (imageFile) {
+                formDataToSend.append('image', imageFile);
+            }
 
             if (isEdit && product) {
-                await apiClient.patch(`/products/${product.id}`, payload);
+                await apiClient.patch(`/products/${product.id}`, formDataToSend, {
+                    headers: { 'Content-Type': 'multipart/form-data' }
+                });
                 toast.success('تم تحديث المنتج بنجاح');
             } else {
-                await apiClient.post('/products', payload);
+                await apiClient.post('/products', formDataToSend, {
+                    headers: { 'Content-Type': 'multipart/form-data' }
+                });
                 toast.success('تم إضافة المنتج بنجاح');
             }
 
@@ -247,20 +263,36 @@ export default function ProductModal({ isOpen, onClose, onSuccess, product }: Pr
                             />
                         </div>
                         <div className="space-y-2">
-                            <label className="text-sm font-bold text-slate-700">رابط الصورة الرئيسية</label>
-                            <div className="relative">
+                            <label className="text-sm font-bold text-slate-700">صورة المنتج</label>
+                            <div className="relative border-2 border-dashed border-slate-300 rounded-xl p-4 flex flex-col items-center justify-center hover:bg-slate-50 transition-colors group h-[120px] overflow-hidden">
                                 <input
-                                    type="url"
-                                    value={formData.images[0]}
+                                    type="file"
+                                    accept="image/*"
                                     onChange={e => {
-                                        const newImages = [...formData.images];
-                                        newImages[0] = e.target.value;
-                                        setFormData({ ...formData, images: newImages });
+                                        const file = e.target.files?.[0];
+                                        if (file) {
+                                            setImageFile(file);
+                                            setImagePreview(URL.createObjectURL(file));
+                                        }
                                     }}
-                                    placeholder="https://example.com/image.jpg"
-                                    className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 outline-none transition-all pl-10"
+                                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
                                 />
-                                <Upload size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+                                {imagePreview ? (
+                                    <div className="absolute inset-0">
+                                        <img src={imagePreview} alt="Preview" className="w-full h-full object-cover" />
+                                        <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                            <p className="text-white font-medium flex items-center gap-2"><Upload size={18} /> تغيير الصورة</p>
+                                        </div>
+                                    </div>
+                                ) : (
+                                    <div className="text-center">
+                                        <div className="w-10 h-10 bg-brand-50 text-brand-600 rounded-full flex items-center justify-center mx-auto mb-2">
+                                            <ImageIcon size={20} />
+                                        </div>
+                                        <p className="text-sm text-slate-600 font-medium">اسحب الصورة أو انقر للاختيار</p>
+                                        <p className="text-xs text-slate-400 mt-1">PNG, JPG, WEBP حتى 5MB</p>
+                                    </div>
+                                )}
                             </div>
                         </div>
                     </div>

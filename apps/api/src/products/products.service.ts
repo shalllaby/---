@@ -6,7 +6,9 @@ import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { ProductsQueryDto } from './dto/products-query.dto';
 import { Prisma, OrderStatus, ShippingType, PaymentMethod } from '@prisma/client';
-
+import * as sharp from 'sharp';
+import axios from 'axios';
+import * as FormData from 'form-data';
 @Injectable()
 export class ProductsService {
     constructor(private readonly prisma: PrismaService) { }
@@ -137,6 +139,47 @@ export class ProductsService {
             where: { stockQuantity: { lte: threshold }, isActive: true },
             orderBy: { stockQuantity: 'asc' },
             take: 20,
+        });
+    }
+
+    async uploadImages(id: string, files: Express.Multer.File[]) {
+        const product = await this.findOne(id);
+        const imageUrls: string[] = [];
+        const apiKey = process.env.IMGBB_API_KEY;
+        if (!apiKey) throw new BadRequestException('إعدادات IMGBB_API_KEY غير متوفرة');
+
+        for (const file of files) {
+            // Compress to WebP
+            const webpBuffer = await sharp(file.buffer)
+                .resize({ width: 800, height: 800, fit: 'inside', withoutEnlargement: true })
+                .webp({ quality: 75 })
+                .toBuffer();
+            
+            // Convert to Base64
+            const base64Image = webpBuffer.toString('base64');
+            
+            // Upload to ImgBB
+            const formData = new FormData();
+            formData.append('image', base64Image);
+            
+            try {
+                const response = await axios.post(`https://api.imgbb.com/1/upload?key=${apiKey}`, formData, {
+                    headers: formData.getHeaders(),
+                });
+                if (response.data && response.data.data && response.data.data.url) {
+                    imageUrls.push(response.data.data.url);
+                }
+            } catch (error) {
+                console.error('ImgBB upload error:', error.message);
+                throw new BadRequestException('فشل في رفع الصورة');
+            }
+        }
+
+        return this.prisma.product.update({
+            where: { id },
+            data: {
+                images: [...(product.images || []), ...imageUrls],
+            },
         });
     }
 }
