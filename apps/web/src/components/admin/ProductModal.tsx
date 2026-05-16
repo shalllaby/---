@@ -51,6 +51,7 @@ export default function ProductModal({ isOpen, onClose, onSuccess, product }: Pr
     });
     const [imageFile, setImageFile] = useState<File | null>(null);
     const [imagePreview, setImagePreview] = useState<string | null>(null);
+    const [imageInputMode, setImageInputMode] = useState<'upload' | 'url'>('upload');
 
     const isEdit = !!product;
 
@@ -68,6 +69,7 @@ export default function ProductModal({ isOpen, onClose, onSuccess, product }: Pr
                     discountPrice: product.discountPrice?.toString() || '',
                     stockQuantity: product.stockQuantity?.toString() || '0',
                     categoryId: product.categoryId || '',
+                    images: product.images?.length > 0 ? product.images : [''],
                 });
                 setImagePreview(product.images?.[0] || null);
                 setImageFile(null);
@@ -119,8 +121,10 @@ export default function ProductModal({ isOpen, onClose, onSuccess, product }: Pr
             if (formData.descriptionAr) formDataToSend.append('descriptionAr', formData.descriptionAr);
             if (formData.descriptionEn) formDataToSend.append('descriptionEn', formData.descriptionEn);
 
-            if (imageFile) {
+            if (imageInputMode === 'upload' && imageFile) {
                 formDataToSend.append('image', imageFile);
+            } else if (imageInputMode === 'url' && formData.images[0]) {
+                formDataToSend.append('images', formData.images[0]);
             }
 
             if (isEdit && product) {
@@ -263,37 +267,81 @@ export default function ProductModal({ isOpen, onClose, onSuccess, product }: Pr
                             />
                         </div>
                         <div className="space-y-2">
-                            <label className="text-sm font-bold text-slate-700">صورة المنتج</label>
-                            <div className="relative border-2 border-dashed border-slate-300 rounded-xl p-4 flex flex-col items-center justify-center hover:bg-slate-50 transition-colors group h-[120px] overflow-hidden">
-                                <input
-                                    type="file"
-                                    accept="image/*"
-                                    onChange={e => {
-                                        const file = e.target.files?.[0];
-                                        if (file) {
-                                            setImageFile(file);
-                                            setImagePreview(URL.createObjectURL(file));
-                                        }
-                                    }}
-                                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
-                                />
-                                {imagePreview ? (
-                                    <div className="absolute inset-0">
-                                        <img src={imagePreview} alt="Preview" className="w-full h-full object-cover" />
-                                        <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                                            <p className="text-white font-medium flex items-center gap-2"><Upload size={18} /> تغيير الصورة</p>
-                                        </div>
-                                    </div>
-                                ) : (
-                                    <div className="text-center">
-                                        <div className="w-10 h-10 bg-brand-50 text-brand-600 rounded-full flex items-center justify-center mx-auto mb-2">
-                                            <ImageIcon size={20} />
-                                        </div>
-                                        <p className="text-sm text-slate-600 font-medium">اسحب الصورة أو انقر للاختيار</p>
-                                        <p className="text-xs text-slate-400 mt-1">PNG, JPG, WEBP حتى 5MB</p>
-                                    </div>
-                                )}
+                            <div className="flex items-center justify-between">
+                                <label className="text-sm font-bold text-slate-700">صورة المنتج</label>
+                                <div className="flex bg-slate-100 rounded-lg p-1">
+                                    <button
+                                        type="button"
+                                        onClick={() => setImageInputMode('upload')}
+                                        className={clsx(
+                                            "px-3 py-1 text-xs font-bold rounded-md transition-colors",
+                                            imageInputMode === 'upload' ? "bg-white text-brand-600 shadow-sm" : "text-slate-500 hover:text-slate-700"
+                                        )}
+                                    >
+                                        رفع صورة
+                                    </button>
+                                    <button
+                                        type="button"
+                                        onClick={() => setImageInputMode('url')}
+                                        className={clsx(
+                                            "px-3 py-1 text-xs font-bold rounded-md transition-colors",
+                                            imageInputMode === 'url' ? "bg-white text-brand-600 shadow-sm" : "text-slate-500 hover:text-slate-700"
+                                        )}
+                                    >
+                                        رابط مباشر
+                                    </button>
+                                </div>
                             </div>
+                            
+                            {imageInputMode === 'upload' ? (
+                                <div className="relative border-2 border-dashed border-slate-300 rounded-xl p-4 flex flex-col items-center justify-center hover:bg-slate-50 transition-colors group h-[120px] overflow-hidden">
+                                    <input
+                                        type="file"
+                                        accept="image/*"
+                                        onChange={e => {
+                                            const file = e.target.files?.[0];
+                                            if (file) {
+                                                setImageFile(file);
+                                                setImagePreview(URL.createObjectURL(file));
+                                            }
+                                        }}
+                                        className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                                    />
+                                    {imagePreview ? (
+                                        <div className="absolute inset-0">
+                                            <img src={imagePreview} alt="Preview" className="w-full h-full object-cover" />
+                                            <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                                <p className="text-white font-medium flex items-center gap-2"><Upload size={18} /> تغيير الصورة</p>
+                                            </div>
+                                        </div>
+                                    ) : (
+                                        <div className="text-center">
+                                            <div className="w-10 h-10 bg-brand-50 text-brand-600 rounded-full flex items-center justify-center mx-auto mb-2">
+                                                <ImageIcon size={20} />
+                                            </div>
+                                            <p className="text-sm text-slate-600 font-medium">اسحب الصورة أو انقر للاختيار</p>
+                                            <p className="text-xs text-slate-400 mt-1">PNG, JPG, WEBP حتى 5MB</p>
+                                        </div>
+                                    )}
+                                </div>
+                            ) : (
+                                <div className="relative h-[120px] flex items-end">
+                                    <div className="relative w-full">
+                                        <input
+                                            type="url"
+                                            value={formData.images[0]}
+                                            onChange={e => {
+                                                const newImages = [...formData.images];
+                                                newImages[0] = e.target.value;
+                                                setFormData({ ...formData, images: newImages });
+                                            }}
+                                            placeholder="https://example.com/image.jpg"
+                                            className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 outline-none transition-all pl-10"
+                                        />
+                                        <Upload size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+                                    </div>
+                                </div>
+                            )}
                         </div>
                     </div>
 

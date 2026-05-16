@@ -58,6 +58,7 @@ export class ProductsController {
         // Handle boolean parsing for FormData
         if (typeof dto.isActive === 'string') dto.isActive = dto.isActive === 'true';
         if (typeof dto.isFeatured === 'string') dto.isFeatured = dto.isFeatured === 'true';
+        if (typeof dto.images === 'string') dto.images = [dto.images];
 
         const product = await this.productsService.create(dto);
         if (image) {
@@ -95,6 +96,7 @@ export class ProductsController {
         // Handle boolean parsing for FormData
         if (typeof dto.isActive === 'string') dto.isActive = dto.isActive === 'true';
         if (typeof dto.isFeatured === 'string') dto.isFeatured = dto.isFeatured === 'true';
+        if (typeof dto.images === 'string') dto.images = [dto.images];
 
         await this.productsService.update(id, dto);
         if (image) {

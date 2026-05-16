@@ -68,8 +68,8 @@ async function main() {
     });
     const deeraClutter = await prisma.category.upsert({
         where: { slug: 'deera-clutter' },
-        update: { imageUrl: '/clutter.webp' },
-        create: { nameAr: 'كراكيب الديره', nameEn: 'Deera Clutter', slug: 'deera-clutter', sortOrder: 5, imageUrl: '/clutter.webp' },
+        update: { imageUrl: '/صور الاقسام/كراكيب الديره.webp' },
+        create: { nameAr: 'كراكيب الديرة', nameEn: 'Deera Clutter', slug: 'deera-clutter', sortOrder: 5, imageUrl: '/صور الاقسام/كراكيب الديره.webp' },
     });
     const discounts = await prisma.category.upsert({
         where: { slug: 'discounts' },
