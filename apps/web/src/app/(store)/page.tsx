@@ -599,7 +599,7 @@ export default async function HomePage() {
                         <div className="about-logo-wrap">
                             <div className="about-logo-bg">
                                 <Image
-                                    src="/logo-2.png"
+                                    src="/logo-2.webp"
                                     alt="انهار الديرة"
                                     width={160}
                                     height={160}

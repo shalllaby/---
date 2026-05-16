@@ -447,7 +447,7 @@ export default function Footer() {
                         <div className="footer-brand-logo">
                             <div className="footer-logo-ring">
                                 <div className="footer-logo-img">
-                                    <Image src="/logo-2.png" alt={STORE_NAME} width={36} height={36} className="object-contain" />
+                                    <Image src="/logo-2.webp" alt={STORE_NAME} width={36} height={36} className="object-contain" />
                                 </div>
                             </div>
                             <div>

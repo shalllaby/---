@@ -23,7 +23,7 @@ export default function AboutPage() {
 
                 <div className="relative z-20 max-w-5xl mx-auto px-4">
                     <div className="w-28 h-28 bg-white rounded-[32px] flex items-center justify-center mx-auto mb-10 shadow-2xl p-5 rotate-3 hover:rotate-0 transition-transform duration-500">
-                        <Image src="/logo-2.png" alt={STORE_NAME} width={90} height={90} className="object-contain" />
+                        <Image src="/logo-2.webp" alt={STORE_NAME} width={90} height={90} className="object-contain" />
                     </div>
                     <h1 className="text-5xl lg:text-7xl font-black mb-8 tracking-tight">
                         {STORE_NAME} <br />

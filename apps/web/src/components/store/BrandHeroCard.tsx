@@ -16,7 +16,7 @@ export default function BrandHeroCard() {
                     {/* Centered Logo with animation */}
                     <div className="bg-white p-5 rounded-full shadow-xl mb-8 transform transition-transform group-hover:scale-105 duration-500">
                         <Image
-                            src="/logo-2.png"
+                            src="/logo-2.webp"
                             alt="أنهار الديرة"
                             width={110}
                             height={110}

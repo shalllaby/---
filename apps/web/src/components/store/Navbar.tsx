@@ -84,7 +84,7 @@ export default function Navbar() {
                         <Link href="/" className="flex-shrink-0 group flex items-center gap-2.5">
                             <div className="relative flex items-center justify-center w-11 h-11">
                                 <Image
-                                    src="/logo-2.png"
+                                    src="/logo-2.webp"
                                     alt="أنهار الديرة"
                                     width={44}
                                     height={44}

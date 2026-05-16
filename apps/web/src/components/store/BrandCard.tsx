@@ -58,7 +58,7 @@ export default function BrandCard() {
                             transform: 'rotate(-4deg)'
                         }}>
                         <Image
-                            src="/logo-2.png"
+                            src="/logo-2.webp"
                             alt="أنهار الديرة"
                             width={80}
                             height={80}
