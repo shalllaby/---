@@ -1,5 +1,5 @@
 import { Metadata } from 'next';
-import { Award, Shield, ThumbsUp, Leaf, Phone, Crown, Code, Wrench } from 'lucide-react';
+import { Award, Shield, ThumbsUp, Leaf, Phone, Crown, Code, Wrench, MessageCircle } from 'lucide-react';
 import Image from 'next/image';
 import { STORE_NAME, STORE_NAME_EN } from '@/lib/constants';
 
@@ -109,8 +109,8 @@ export default function AboutPage() {
                             <Phone className="w-5 h-5" />
                             <span dir="ltr">60048631</span>
                         </a>
-                        <a href="tel:65668003" className="inline-flex items-center gap-2 bg-white text-blue-700 px-8 py-4 rounded-2xl font-bold shadow-sm hover:shadow-md hover:-translate-y-1 transition-all border border-blue-100">
-                            <Phone className="w-5 h-5" />
+                        <a href="https://wa.me/96565668003" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 bg-green-50 text-green-700 px-8 py-4 rounded-2xl font-bold shadow-sm hover:shadow-md hover:-translate-y-1 transition-all border border-green-100">
+                            <MessageCircle className="w-5 h-5" />
                             <span dir="ltr">65668003</span>
                         </a>
                     </div>
@@ -132,7 +132,7 @@ export default function AboutPage() {
                             <div className="w-20 h-20 bg-amber-100 text-amber-600 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform shadow-inner">
                                 <Crown className="w-10 h-10" />
                             </div>
-                            <h3 className="text-2xl font-black text-slate-900 mb-2">أستاذ أحمد توفيق</h3>
+                            <h3 className="text-2xl font-black text-slate-900 mb-2">أستاذ أحمد اسماعيل</h3>
                             <p className="text-amber-700 font-bold mb-6">المدير التنفيذي ورئيس مجلس الإدارة</p>
                             <a href="tel:60008807" className="inline-flex items-center gap-2 bg-white hover:bg-amber-600 hover:text-white text-amber-700 px-6 py-3 rounded-2xl transition-all font-bold border border-amber-200 hover:border-amber-600 shadow-sm w-full justify-center">
                                 <Phone className="w-4 h-4" />
