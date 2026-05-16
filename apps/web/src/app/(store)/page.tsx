@@ -468,7 +468,7 @@ export default async function HomePage() {
                     <div className="cat-grid">
                         {categories.slice(0, 12).map((cat: any) => {
                             const isDiscount = cat.slug === 'discounts' || cat.nameAr === 'الخصومات';
-                            const imageName = `${cat.nameAr}.png`;
+                            const imageName = `${cat.nameAr}.webp`;
                             const localImagePath = `/صور الاقسام/${imageName}`;
 
                             // Rule: If we have a remote imageUrl in DB, use it (best for Production)

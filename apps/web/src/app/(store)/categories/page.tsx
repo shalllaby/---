@@ -46,7 +46,7 @@ export default async function CategoriesPage() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
                     {categories.map((cat: any) => {
                         const isDiscount = cat.slug === 'discounts' || cat.nameAr === 'الخصومات';
-                        const imageName = `${cat.nameAr}.png`;
+                        const imageName = `${cat.nameAr}.webp`;
                         const localImagePath = `/صور الاقسام/${imageName}`;
 
                         let finalSrc = cat.imageUrl || localImagePath;

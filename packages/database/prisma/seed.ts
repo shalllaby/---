@@ -48,38 +48,38 @@ async function main() {
     // ── Categories ─────────────────────────────────────────────────────
     const utensils = await prisma.category.upsert({
         where: { slug: 'utensils' },
-        update: { imageUrl: 'https://i.ibb.co/Kjh1wdGV/image.png' },
-        create: { nameAr: 'الأواني', nameEn: 'Utensils', slug: 'utensils', sortOrder: 1, imageUrl: 'https://i.ibb.co/Kjh1wdGV/image.png' },
+        update: { imageUrl: '/صور الاقسام/الأواني.webp' },
+        create: { nameAr: 'الأواني', nameEn: 'Utensils', slug: 'utensils', sortOrder: 1, imageUrl: '/صور الاقسام/الأواني.webp' },
     });
     const paperProducts = await prisma.category.upsert({
         where: { slug: 'paper-products' },
-        update: { imageUrl: 'https://i.ibb.co/QFvM28SK/image.png' },
-        create: { nameAr: 'المنتجات الورقية', nameEn: 'Paper Products', slug: 'paper-products', sortOrder: 2, imageUrl: 'https://i.ibb.co/QFvM28SK/image.png' },
+        update: { imageUrl: '/صور الاقسام/المنتجات الورقية.webp' },
+        create: { nameAr: 'المنتجات الورقية', nameEn: 'Paper Products', slug: 'paper-products', sortOrder: 2, imageUrl: '/صور الاقسام/المنتجات الورقية.webp' },
     });
     const detergents = await prisma.category.upsert({
         where: { slug: 'detergents' },
-        update: { imageUrl: 'https://i.ibb.co/sJ1sxd48/image.png' },
-        create: { nameAr: 'المنظفات والمساحيق', nameEn: 'Detergents & Powders', slug: 'detergents', sortOrder: 3, imageUrl: 'https://i.ibb.co/sJ1sxd48/image.png' },
+        update: { imageUrl: '/صور الاقسام/المنظفات والمساحيق.webp' },
+        create: { nameAr: 'المنظفات والمساحيق', nameEn: 'Detergents & Powders', slug: 'detergents', sortOrder: 3, imageUrl: '/صور الاقسام/المنظفات والمساحيق.webp' },
     });
     const skinCare = await prisma.category.upsert({
         where: { slug: 'skin-care' },
-        update: { imageUrl: 'https://i.ibb.co/tTXMsyr7/image.png' },
-        create: { nameAr: 'العناية بالبشرة', nameEn: 'Skin Care', slug: 'skin-care', sortOrder: 4, imageUrl: 'https://i.ibb.co/tTXMsyr7/image.png' },
+        update: { imageUrl: '/صور الاقسام/العناية بالبشرة.webp' },
+        create: { nameAr: 'العناية بالبشرة', nameEn: 'Skin Care', slug: 'skin-care', sortOrder: 4, imageUrl: '/صور الاقسام/العناية بالبشرة.webp' },
     });
     const deeraClutter = await prisma.category.upsert({
         where: { slug: 'deera-clutter' },
-        update: { imageUrl: '/clutter.png' },
-        create: { nameAr: 'كراكيب الديره', nameEn: 'Deera Clutter', slug: 'deera-clutter', sortOrder: 5, imageUrl: '/clutter.png' },
+        update: { imageUrl: '/clutter.webp' },
+        create: { nameAr: 'كراكيب الديره', nameEn: 'Deera Clutter', slug: 'deera-clutter', sortOrder: 5, imageUrl: '/clutter.webp' },
     });
     const discounts = await prisma.category.upsert({
         where: { slug: 'discounts' },
-        update: { imageUrl: 'https://i.ibb.co/4nnD5cpw/Gemini-Generated-Image-e48lege48lege48l.png' },
-        create: { nameAr: 'الخصومات', nameEn: 'Discounts', slug: 'discounts', sortOrder: 0, imageUrl: 'https://i.ibb.co/4nnD5cpw/Gemini-Generated-Image-e48lege48lege48l.png' },
+        update: { imageUrl: '/صور الاقسام/الخصومات.webp' },
+        create: { nameAr: 'الخصومات', nameEn: 'Discounts', slug: 'discounts', sortOrder: 0, imageUrl: '/صور الاقسام/الخصومات.webp' },
     });
     const dacProducts = await prisma.category.upsert({
         where: { slug: 'dac-products' },
-        update: { imageUrl: 'https://i.ibb.co/shdq8x0/Gemini-Generated-Image-lq042tlq042tlq04.png' },
-        create: { nameAr: 'منتجات داك', nameEn: 'DAC Products', slug: 'dac-products', sortOrder: 6, imageUrl: 'https://i.ibb.co/shdq8x0/Gemini-Generated-Image-lq042tlq042tlq04.png' },
+        update: { imageUrl: '/صور الاقسام/منتجات داك.webp' },
+        create: { nameAr: 'منتجات داك', nameEn: 'DAC Products', slug: 'dac-products', sortOrder: 6, imageUrl: '/صور الاقسام/منتجات داك.webp' },
     });
 
     console.log('✅ Categories created');
