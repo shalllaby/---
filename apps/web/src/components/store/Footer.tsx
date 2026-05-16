@@ -518,7 +518,7 @@ export default function Footer() {
                         <div className="footer-col-title">الإدارة</div>
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                             <div>
-                                <div style={{ fontSize: '0.82rem', fontWeight: 700, color: '#CBD5E1' }}>أ. أحمد توفيق</div>
+                                <div style={{ fontSize: '0.82rem', fontWeight: 700, color: '#CBD5E1' }}>أ. أحمد اسماعيل</div>
                                 <div style={{ fontSize: '0.68rem', color: '#94A3B8', marginBottom: '2px' }}>رئيس مجلس الإدارة</div>
                                 <a href="tel:60008807" style={{ fontSize: '0.78rem', color: '#A78BFA', textDecoration: 'none', direction: 'ltr', display: 'inline-block', transition: 'color 0.2s' }} onMouseOver={(e) => e.currentTarget.style.color = '#fff'} onMouseOut={(e) => e.currentTarget.style.color = '#A78BFA'}>60008807</a>
                             </div>
